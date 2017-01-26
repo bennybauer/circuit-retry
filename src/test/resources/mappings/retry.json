@@ -1,0 +1,13 @@
+{
+  "scenarioName": "retry",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "request retry 1",
+  "request": {
+    "method": "GET",
+    "url": "/retry"
+  },
+  "response": {
+    "status": 200,
+    "fixedDelayMilliseconds": 10000
+  }
+}

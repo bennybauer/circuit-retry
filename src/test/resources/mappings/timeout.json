@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPattern": "/timeout"
+  },
+  "response": {
+    "status": 200,
+    "body": "delayed response",
+    "headers": {
+      "Content-Type": "text/plain"
+    },
+    "fixedDelayMilliseconds": 10000
+  }
+}

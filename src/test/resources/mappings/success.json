@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPattern": "/success"
+  },
+  "response": {
+    "status": 200,
+    "body": "Hello there",
+    "headers": {
+      "Content-Type": "text/plain"
+    }
+  }
+}
