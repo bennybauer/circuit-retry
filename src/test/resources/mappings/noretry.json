@@ -1,0 +1,10 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/noretry"
+  },
+  "response": {
+    "status": 200,
+    "fixedDelayMilliseconds": 8000
+  }
+}

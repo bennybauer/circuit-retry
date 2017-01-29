@@ -38,6 +38,12 @@
             <version>1.0.2</version>
         </dependency>
 
+        <!-- Hystix -->
+        <dependency>
+            <groupId>com.netflix.hystrix</groupId>
+            <artifactId>hystrix-core</artifactId>
+            <version>1.5.9</version>
+        </dependency>
 
         <!-- Test -->
         <dependency>

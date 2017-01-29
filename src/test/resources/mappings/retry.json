@@ -7,7 +7,7 @@
     "url": "/retry"
   },
   "response": {
-    "status": 200,
-    "fixedDelayMilliseconds": 10000
+    "status": 400,
+    "fixedDelayMilliseconds": 5000
   }
 }
