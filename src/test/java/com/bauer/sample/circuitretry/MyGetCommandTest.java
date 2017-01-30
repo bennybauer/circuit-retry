@@ -77,7 +77,7 @@ public class MyGetCommandTest {
     public void testRetryExhausted() {
         HystrixRequestContext context = HystrixRequestContext.initializeContext();
         try {
-            RetryPolicy retryPolicy = new RetryPolicy().withMaxRetries(1);  // Only 1 retry, as stub retryX.json is configured to succeed on 3rd attempt
+            RetryPolicy retryPolicy = new RetryPolicy().withMaxRetries(1).withDelay(1000, TimeUnit.MILLISECONDS);  // Only 1 retry, as stub retryX.json is configured to succeed on 3rd attempt
             MyGetCommand getCommand = new MyGetCommand(WIREMOCK_URL + "/retry", retryPolicy);
             String result = getCommand.execute();
 

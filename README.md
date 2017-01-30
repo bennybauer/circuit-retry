@@ -6,8 +6,6 @@ In fact, timeout responsibility is handled to retry and is disabled on the comma
 ## Setup
 `mvn install`
 
-## 
-
 ## Lessons Learned
 ### Hystrix
 * Throwing a `HystrixTimeoutException` will be considered as `FAILURE` exuction exception and not `TIMEOUT`, unless [`execution.timeout.enabled`](https://github.com/Netflix/Hystrix/wiki/Configuration#executiontimeoutenabled) is false
