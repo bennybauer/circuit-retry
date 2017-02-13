@@ -53,13 +53,15 @@ public class MyHttpClient {
         }
 
         ClientConfig clientConfig = new ClientConfig();
-        clientConfig.connectorProvider(new ApacheConnectorProvider());
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, CONNECTION_TIMEOUT);
         clientConfig.property(ClientProperties.READ_TIMEOUT, SOCKET_TIMEOUT);
 
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxTotal(10);
+        connectionManager.setDefaultMaxPerRoute(3);
+
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
+        clientConfig.connectorProvider(new ApacheConnectorProvider());
         httpClient = ClientBuilder.newClient(clientConfig);
     }
 

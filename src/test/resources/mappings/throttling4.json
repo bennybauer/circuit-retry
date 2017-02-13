@@ -1,12 +1,11 @@
 {
   "scenarioName": "throttling",
-  "requiredScenarioState": "failed request retry 1",
-  "newScenarioState": "failed request retry 2",
+  "requiredScenarioState": "failed request retry 3",
   "request": {
     "method": "GET",
     "url": "/throttling"
   },
   "response": {
-    "status": 429
+    "status": 200
   }
 }

@@ -9,6 +9,3 @@ In fact, timeout responsibility is handled to retry and is disabled on the comma
 ## Lessons Learned
 ### Hystrix
 * Throwing a `HystrixTimeoutException` will be considered as `FAILURE` exuction exception and not `TIMEOUT`, unless [`execution.timeout.enabled`](https://github.com/Netflix/Hystrix/wiki/Configuration#executiontimeoutenabled) is false
-
-### Failsafe
-* There seems to be an issue with retrying `retryIf` more than once. It succeeds on first time but then the http client is hanging.
