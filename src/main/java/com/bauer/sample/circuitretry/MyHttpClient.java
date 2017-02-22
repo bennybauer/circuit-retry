@@ -2,7 +2,9 @@ package com.bauer.sample.circuitretry;
 
 import com.netflix.hystrix.exception.HystrixTimeoutException;
 import net.jodah.failsafe.Failsafe;
+import net.jodah.failsafe.Listeners;
 import net.jodah.failsafe.RetryPolicy;
+import net.jodah.failsafe.SyncFailsafe;
 import net.jodah.failsafe.function.Predicate;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
@@ -31,6 +33,7 @@ public class MyHttpClient {
 
     private Client httpClient;
     private RetryPolicy retryPolicy;
+    private Listeners<Response> listeners;
 
     public MyHttpClient() {
         this(null);
@@ -65,9 +68,20 @@ public class MyHttpClient {
         httpClient = ClientBuilder.newClient(clientConfig);
     }
 
+    // used for adding listeners, currently only for testing, to get total executions count
+    protected void setListeners(Listeners<Response> listeners) {
+        this.listeners = listeners;
+    }
+
     public Response executeRequest(final String url) throws HystrixTimeoutException {
         try {
-            Response response = Failsafe.with(retryPolicy).get(new Callable<Response>() {
+            SyncFailsafe<Response> failsafe = Failsafe.with(retryPolicy);
+
+            if (listeners != null) {
+                failsafe.with(listeners);
+            }
+
+            Response response = failsafe.get(new Callable<Response>() {
                 public Response call() {
                     System.out.println(new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()) + " MyHttpClient: executing " + url);
                     return httpClient.target(url)

@@ -2,7 +2,9 @@ package com.bauer.sample.circuitretry;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.netflix.hystrix.exception.HystrixTimeoutException;
+import net.jodah.failsafe.ExecutionContext;
 import net.jodah.failsafe.Failsafe;
+import net.jodah.failsafe.Listeners;
 import net.jodah.failsafe.RetryPolicy;
 import net.jodah.failsafe.function.Predicate;
 import org.apache.http.HttpStatus;
@@ -76,7 +78,7 @@ public class MyHttpClientTest {
     public void testRetryIfHangs() throws InterruptedException, ExecutionException, IOException {
         RetryPolicy retryPolicy = new RetryPolicy()
                 .withDelay(500, TimeUnit.MILLISECONDS)
-                .withMaxRetries(2)                          // works with one retry
+                .withMaxRetries(2)
                 .retryIf(new Predicate<Response>() {
                     public boolean test(Response response) {
                         return response != null && response.getStatus() == 429;
@@ -90,7 +92,7 @@ public class MyHttpClientTest {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 1000);
         clientConfig.property(ClientProperties.READ_TIMEOUT, 500);
-        clientConfig.connectorProvider(new ApacheConnectorProvider());   // works well when this line is commented out
+        clientConfig.connectorProvider(new ApacheConnectorProvider());
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, cm);
         final Client httpClient = ClientBuilder.newClient(clientConfig);
 
@@ -109,5 +111,21 @@ public class MyHttpClientTest {
         });
 
         assertEquals(429, response.getStatus());
+    }
+
+    @Test
+    public void testExecuteRequestTimeoutWithDefaultRetryPolicyWithListener() throws HystrixTimeoutException {
+        MyHttpClient client = new MyHttpClient();
+        Listeners<Response> listeners = new Listeners<Response>() {
+            @Override
+            public void onComplete(Response result, Throwable failure, ExecutionContext context) {
+                super.onComplete(result, failure, context);
+                assertEquals(3, context.getExecutions());
+            }
+        };
+
+        client.setListeners(listeners);
+        Response response = client.executeRequest(WIREMOCK_URL + "/retry");
+        assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 }
